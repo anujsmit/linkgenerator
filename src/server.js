@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require("cors");
+
 const {
     getNextLink,
     resetLinks,
@@ -8,6 +10,12 @@ const {
 const app = express();
 
 const PORT = process.env.PORT || 3000;
+
+app.use(cors({
+    origin: true,
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.use(express.json());
 
@@ -35,7 +43,7 @@ app.get("/api/link", (req, res) => {
             id: link.id
         });
     } catch (error) {
-        console.error(error);
+        console.error("Link error:", error);
 
         return res.status(500).json({
             success: false,
@@ -54,7 +62,7 @@ app.post("/api/link/reset", (req, res) => {
             total: links.length
         });
     } catch (error) {
-        console.error(error);
+        console.error("Reset error:", error);
 
         return res.status(500).json({
             success: false,
@@ -72,7 +80,7 @@ app.get("/api/link/status", (req, res) => {
             ...status
         });
     } catch (error) {
-        console.error(error);
+        console.error("Status error:", error);
 
         return res.status(500).json({
             success: false,
@@ -81,7 +89,13 @@ app.get("/api/link/status", (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Smart Link Server running on http://localhost:${PORT}`);
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: "Route not found"
+    });
 });
 
+app.listen(PORT, "127.0.0.1", () => {
+    console.log(`Smart Link Server running on http://127.0.0.1:${PORT}`);
+});
