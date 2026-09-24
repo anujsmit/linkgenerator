@@ -3,7 +3,11 @@
 const fs = require("fs");
 const path = require("path");
 
-const linksFile = path.join(__dirname, "../data/links.json");
+const linksFile = path.join(
+    process.cwd(),
+    "data",
+    "links.json"
+);
 
 function readLinks() {
     if (!fs.existsSync(linksFile)) {
