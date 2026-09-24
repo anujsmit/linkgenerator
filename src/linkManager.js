@@ -1,4 +1,5 @@
-//src/linkManager.js
+// src/linkManager.js
+
 const fs = require("fs");
 const path = require("path");
 
@@ -6,15 +7,20 @@ const linksFile = path.join(__dirname, "../data/links.json");
 
 function readLinks() {
     if (!fs.existsSync(linksFile)) {
-        return [];
+        throw new Error(`links.json not found: ${linksFile}`);
     }
 
-    const data = fs.readFileSync(linksFile, "utf-8");
-
     try {
-        return JSON.parse(data);
+        const data = fs.readFileSync(linksFile, "utf-8");
+        const links = JSON.parse(data);
+
+        if (!Array.isArray(links)) {
+            throw new Error("links.json must contain an array");
+        }
+
+        return links;
     } catch (error) {
-        throw new Error("Invalid links.json file");
+        throw new Error(`Failed to read links.json: ${error.message}`);
     }
 }
 
@@ -48,15 +54,15 @@ function getNextLink() {
 function resetLinks() {
     const links = readLinks();
 
-    const resetLinks = links.map((link) => ({
+    const reset = links.map((link) => ({
         ...link,
         status: "available",
         usedAt: null
     }));
 
-    saveLinks(resetLinks);
+    saveLinks(reset);
 
-    return resetLinks;
+    return reset;
 }
 
 function getStatus() {
