@@ -11,7 +11,16 @@ const app = express();
 
 const PORT = process.env.PORT || 9000;
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        "https://anujkattel.com.np",
+        "https://www.anujkattel.com.np",
+        "http://localhost:5173",
+        "https://linkgenerator-seven.vercel.app/"
+    ],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Accept"]
+}));
 
 app.use(express.json());
 
