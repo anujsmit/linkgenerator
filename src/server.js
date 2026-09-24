@@ -1,5 +1,4 @@
 const express = require("express");
-const cors = require("cors");
 
 const {
     getNextLink,
@@ -10,17 +9,6 @@ const {
 const app = express();
 
 const PORT = process.env.PORT || 9000;
-
-app.use(cors({
-    origin: [
-        "https://anujkattel.com.np",
-        "https://www.anujkattel.com.np",
-        "http://localhost:5173",
-        "https://linkgenerator-seven.vercel.app/"
-    ],
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Accept"]
-}));
 
 app.use(express.json());
 
@@ -95,7 +83,5 @@ app.get("/api/link/status", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(
-        `Smart Link Server running on port ${PORT}`
-    );
+    console.log(`Smart Link Server running on port ${PORT}`);
 });
